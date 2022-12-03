@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "list-warehouses": "webpack --mode development ./src/ListWarehouses.js --output-path ./static/frontend/"
+    "list-warehouses": "webpack --mode development ./src/ListWarehouses.js --output-path ./static/frontend/ --output-filename list-warehouses.js",
+    "list-products": "webpack --mode development ./src/ListProucts.js --output-path ./static/frontend/ --output-filename list-products.js",
+    "list-orders": "webpack --mode development ./src/ListOrders.js --output-path ./static/frontend/ --output-filename list-orders.js"
+
   },
   "keywords": [],
   "author": "",
