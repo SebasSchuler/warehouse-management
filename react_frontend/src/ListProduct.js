@@ -1,0 +1,1 @@
+import ListProductsComponent from "./components/ListProductsComponent";
