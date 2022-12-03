@@ -13,9 +13,12 @@ urlpatterns = [
     path('warehouse/<str:id>', views.get_warehouse_by_pk, name='get_warehouse_by_pk'),
     path('warehouse/delete/<str:id>', views.delete_warehouse, name='delete_warehouse'),
     path('warehouse/update/<str:id>', views.update_warehouse, name='update_warehouse'),
+    path('productwarehouse/create', views.add_product_to_warehouse, name='add_product_to_warehouse'),
+    path('productswarehouse/<str:id>', views.list_warehouse_products, name='list_warehouse_products'),
     path('order/create/', views.add_order, name='add_order'),
     path('orders/', views.list_orders, name='list_orders'),
     path('order/<str:id>', views.get_order_by_pk, name='get_order_by_pk'),
     path('order/delete/<str:id>', views.delete_order, name='delete_order'),
     path('order/update/<str:id>', views.update_order, name='update_order'),
+    path('order/products/<str:id>', views.list_products_from_order, name='list_products_from_order'),
 ]

@@ -3,14 +3,17 @@ import uuid
 from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import serializers, status
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 
-from manager.models import Product, Warehouse, Order
-from manager.serializers import ProductSerializer, WarehouseSerializer, OrderSerializer
+from manager.models import Product, Warehouse, Order, ProductWarehouse
+from manager.serializers import ProductSerializer, WarehouseSerializer, OrderSerializer, ProductWarehouseSerializer
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def add_product(request):
     product = ProductSerializer(data=request.data)
 
@@ -25,6 +28,7 @@ def add_product(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def list_products(request):
     if request.query_params:
         products = Product.objects.filter(**request.query_param.dict())
@@ -39,6 +43,7 @@ def list_products(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_product_by_pk(request, id):
     product = Product.objects.filter(id=id)
     if product:
@@ -49,6 +54,7 @@ def get_product_by_pk(request, id):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete_product(request, id):
     product = Product.objects.filter(id=id)
 
@@ -60,6 +66,7 @@ def delete_product(request, id):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def update_product(request, id):
     product = Product.objects.get(id=id)
     data = ProductSerializer(instance=product, data=request.data)
@@ -72,6 +79,7 @@ def update_product(request, id):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def add_warehouse(request):
     warehouse = WarehouseSerializer(data=request.data)
 
@@ -84,7 +92,9 @@ def add_warehouse(request):
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def list_warehouses(request):
     if request.query_params:
         warehouse = Warehouse.objects.filter(**request.query_param.dict())
@@ -99,6 +109,7 @@ def list_warehouses(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_warehouse_by_pk(request, id):
     warehouse = Warehouse.objects.filter(id=id)
     if warehouse:
@@ -109,6 +120,7 @@ def get_warehouse_by_pk(request, id):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete_warehouse(request, id):
     warehouse = Warehouse.objects.filter(id=id)
 
@@ -120,6 +132,7 @@ def delete_warehouse(request, id):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def update_warehouse(request, id):
     warehouse = Warehouse.objects.get(id=id)
     data = WarehouseSerializer(instance=warehouse, data=request.data)
@@ -132,6 +145,7 @@ def update_warehouse(request, id):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def add_order(request):
     order = OrderSerializer(data=request.data)
 
@@ -144,7 +158,9 @@ def add_order(request):
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def list_orders(request):
     if request.query_params:
         order = Order.objects.filter(**request.query_param.dict())
@@ -159,6 +175,7 @@ def list_orders(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_order_by_pk(request, id):
     order = Order.objects.filter(id=id)
     if order:
@@ -169,6 +186,7 @@ def get_order_by_pk(request, id):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete_order(request, id):
     order = Order.objects.filter(id=id)
 
@@ -180,6 +198,7 @@ def delete_order(request, id):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def update_order(request, id):
     order = Order.objects.get(id=id)
     data = OrderSerializer(instance=order, data=request.data)
@@ -187,5 +206,57 @@ def update_order(request, id):
     if data.is_valid():
         data.save()
         return Response(data.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_product_to_warehouse(request):
+    product_warehouse = ProductWarehouseSerializer(data=request.data)
+
+    if ProductWarehouse.objects.filter(product_id=request.data.get("product_id")).exists():
+        ProductWarehouse.objects.filter(**request.data).delete()
+
+    if product_warehouse.is_valid():
+        product_warehouse.save()
+        return Response(product_warehouse.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def list_warehouse_products(request, id):
+    products = Product.objects.filter(productwarehouse__warehouse_id=id)
+    if products:
+        products = ProductSerializer(products, many=True)
+        return Response(products.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_product_to_warehouse(request):
+    product_warehouse = ProductWarehouseSerializer(data=request.data)
+
+    if ProductWarehouse.objects.filter(product_id=request.data.get("product_id")).exists():
+        ProductWarehouse.objects.filter(**request.data).delete()
+
+    if product_warehouse.is_valid():
+        product_warehouse.save()
+        return Response(product_warehouse.data)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def list_products_from_order(request, id):
+    products = Product.objects.filter(order_id_id__id=id)
+    if products:
+        products = ProductSerializer(products, many=True)
+        return Response(products.data)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)

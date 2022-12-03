@@ -1,3 +1,9 @@
 from django.test import TestCase
 
-# Create your tests here.
+from rest_framework.test import APIRequestFactory
+
+
+# def test_add_product():
+#     factory = APIRequestFactory()
+#     request = factory.post('/notes/', {'title': 'new idea'})
+#     assert res
