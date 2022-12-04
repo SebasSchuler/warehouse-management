@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-$&8b9&z0r9-*lh*r7zdi-1k7=y&ivqk0^b)7nyvv&@=js2)s2z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,13 +40,16 @@ INSTALLED_APPS = [
     'manager',
     'rest_framework',
     'corsheaders',
+    'react_frontend',
+    'rest_framework.authtoken',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ]
+    ],
 }
 
 MIDDLEWARE = [
@@ -61,10 +64,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',
-]
-
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',  # React default port = 3000
+    'http://localhost:8000',  # Django default port = 8000
+)
 ROOT_URLCONF = 'warehouse.urls'
 
 TEMPLATES = [

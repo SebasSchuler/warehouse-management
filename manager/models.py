@@ -18,7 +18,8 @@ class Product(models.Model):
 
 class Warehouse(models.Model):
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=50)
-
+    address = models.CharField(max_length=200)
 
 class Order(models.Model):
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=50)
+    email = models.CharField(max_length=200)

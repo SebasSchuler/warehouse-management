@@ -22,16 +22,17 @@ class AddWarehouseComponent extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     console.log("submitted");
-    const body = e.target.address.value;
-    fetch("http://localhost:8000/manager/warehouse/create/", {
-      method: 'POST',
+    const body = e.target.id.value;
+    const url = "http://localhost:8000/manager/warehouse/delete/".concat(body)
+    console.log(url)
+    fetch(url, {
+      method: 'DELETE',
       headers: {
           'Authorization':'Token 2eaa330cb4803995b8cc3474360ac1905f414743',
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
           'X-CSRFToken': getCookie("csrftoken")
-      },
-      body: JSON.stringify({address:body})
+      }
     }).then((response) => {
       console.log(response);
       return response.json();
@@ -42,9 +43,9 @@ class AddWarehouseComponent extends Component {
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <label>Address: </label>
+          <label>Id: </label>
           <br />
-          <input type="text" name="address" />
+          <input type="text" name="id" />
           <br />
           <input type="submit" />
         </form>

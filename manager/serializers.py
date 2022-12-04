@@ -11,7 +11,7 @@ class ProductSerializer(serializers.ModelSerializer):
 class WarehouseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Warehouse
-        fields = ('id',)
+        fields = ('id','address')
 
 class ProductWarehouseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,5 +21,5 @@ class ProductWarehouseSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ('id',)
+        fields = ('id','email')
 

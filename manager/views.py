@@ -1,19 +1,44 @@
 import uuid
 
+from django.contrib.auth import authenticate
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import serializers, status
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, renderer_classes
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_200_OK
 
 from manager.models import Product, Warehouse, Order, ProductWarehouse
 from manager.serializers import ProductSerializer, WarehouseSerializer, OrderSerializer, ProductWarehouseSerializer
 
 
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def login(request):
+    username = request.data.get("username")
+    password = request.data.get("password")
+    if username is None or password is None:
+        return Response({'error': 'Please provide both username and password'},
+                        status=HTTP_400_BAD_REQUEST)
+    user = authenticate(username=username, password=password)
+    if not user:
+        return Response({'error': 'Invalid Credentials'},
+                        status=HTTP_404_NOT_FOUND)
+    token = Token.objects.create(user=user)
+    print(token.key)
+    return Response({'token': token.key},
+                    status=HTTP_200_OK)
+
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@renderer_classes([JSONRenderer])
 def add_product(request):
     product = ProductSerializer(data=request.data)
 
@@ -29,6 +54,7 @@ def add_product(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@renderer_classes([JSONRenderer])
 def list_products(request):
     if request.query_params:
         products = Product.objects.filter(**request.query_param.dict())
@@ -44,6 +70,7 @@ def list_products(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@renderer_classes([JSONRenderer])
 def get_product_by_pk(request, id):
     product = Product.objects.filter(id=id)
     if product:
@@ -95,6 +122,7 @@ def add_warehouse(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@renderer_classes([JSONRenderer])
 def list_warehouses(request):
     if request.query_params:
         warehouse = Warehouse.objects.filter(**request.query_param.dict())
@@ -110,6 +138,7 @@ def list_warehouses(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@renderer_classes([JSONRenderer])
 def get_warehouse_by_pk(request, id):
     warehouse = Warehouse.objects.filter(id=id)
     if warehouse:
@@ -146,6 +175,7 @@ def update_warehouse(request, id):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@renderer_classes([JSONRenderer])
 def add_order(request):
     order = OrderSerializer(data=request.data)
 
@@ -161,6 +191,7 @@ def add_order(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@renderer_classes([JSONRenderer])
 def list_orders(request):
     if request.query_params:
         order = Order.objects.filter(**request.query_param.dict())
@@ -176,6 +207,7 @@ def list_orders(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@renderer_classes([JSONRenderer])
 def get_order_by_pk(request, id):
     order = Order.objects.filter(id=id)
     if order:
@@ -212,6 +244,7 @@ def update_order(request, id):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@renderer_classes([JSONRenderer])
 def add_product_to_warehouse(request):
     product_warehouse = ProductWarehouseSerializer(data=request.data)
 
@@ -227,6 +260,7 @@ def add_product_to_warehouse(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@renderer_classes([JSONRenderer])
 def list_warehouse_products(request, id):
     products = Product.objects.filter(productwarehouse__warehouse_id=id)
     if products:
@@ -238,7 +272,9 @@ def list_warehouse_products(request, id):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@renderer_classes([JSONRenderer])
 def add_product_to_warehouse(request):
+
     product_warehouse = ProductWarehouseSerializer(data=request.data)
 
     if ProductWarehouse.objects.filter(product_id=request.data.get("product_id")).exists():
@@ -253,6 +289,7 @@ def add_product_to_warehouse(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@renderer_classes([JSONRenderer])
 def list_products_from_order(request, id):
     products = Product.objects.filter(order_id_id__id=id)
     if products:
@@ -260,3 +297,8 @@ def list_products_from_order(request, id):
         return Response(products.data)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def get_csrf(request):
+    return HttpResponse("{0}".format(csrf.get_token(request)), content_type="text/plain")

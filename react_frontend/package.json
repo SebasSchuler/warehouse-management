@@ -6,9 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "list-warehouses": "webpack --mode development ./src/ListWarehouses.js --output-path ./static/frontend/ --output-filename list-warehouses.js",
-    "list-products": "webpack --mode development ./src/ListProucts.js --output-path ./static/frontend/ --output-filename list-products.js",
+    "add-warehouse": "webpack --mode development ./src/AddWarehouse.js --output-path ./static/frontend/ --output-filename add-warehouse.js",
+    "delete-warehouse": "webpack --mode development ./src/DeleteWarehouse.js --output-path ./static/frontend/ --output-filename delete-warehouse.js",
+    "list-products": "webpack --mode development ./src/ListProducts.js --output-path ./static/frontend/ --output-filename list-products.js",
     "list-orders": "webpack --mode development ./src/ListOrders.js --output-path ./static/frontend/ --output-filename list-orders.js"
-
   },
   "keywords": [],
   "author": "",
@@ -22,5 +23,8 @@
     "react-dom": "^18.2.0",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.0"
+  },
+  "dependencies": {
+    "jquery": "^3.6.1"
   }
 }

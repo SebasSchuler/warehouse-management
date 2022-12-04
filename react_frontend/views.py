@@ -10,11 +10,11 @@ def list_products(request):
 
 
 def products(request):
-    return render(request, 'frontend/products.html')
+    return render(request, 'frontend/products/products.html')
 
 
 def list_products(request):
-    return render(request, 'frontend/warehouses/list_products.html')
+    return render(request, 'frontend/products/list_products.html')
 
 
 def warehouses(request):
@@ -25,5 +25,13 @@ def list_warehouses(request):
     return render(request, 'frontend/warehouses/list_warehouses.html')
 
 
+def add_warehouse(request):
+    return render(request, 'frontend/warehouses/add_warehouse.html')
+
+
+def delete_warehouse(request):
+    return render(request, 'frontend/warehouses/delete_warehouse.html')
+
+
 def orders(request):
-    return render(request, 'frontend/orders.html')
+    return render(request, 'frontend/orders/orders.html')
