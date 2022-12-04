@@ -13,8 +13,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes, renderer_classes
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND, HTTP_200_OK
 
-from manager.models import Product, Warehouse, Order, ProductWarehouse
-from manager.serializers import ProductSerializer, WarehouseSerializer, OrderSerializer, ProductWarehouseSerializer
+from manager.models import Product, Warehouse, Order
+from manager.serializers import ProductSerializer, WarehouseSerializer, OrderSerializer
 
 
 
@@ -242,51 +242,6 @@ def update_order(request, id):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-@renderer_classes([JSONRenderer])
-def add_product_to_warehouse(request):
-    product_warehouse = ProductWarehouseSerializer(data=request.data)
-
-    if ProductWarehouse.objects.filter(product_id=request.data.get("product_id")).exists():
-        ProductWarehouse.objects.filter(**request.data).delete()
-
-    if product_warehouse.is_valid():
-        product_warehouse.save()
-        return Response(product_warehouse.data)
-    else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-@renderer_classes([JSONRenderer])
-def list_warehouse_products(request, id):
-    products = Product.objects.filter(productwarehouse__warehouse_id=id)
-    if products:
-        products = ProductSerializer(products, many=True)
-        return Response(products.data)
-    else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-@renderer_classes([JSONRenderer])
-def add_product_to_warehouse(request):
-
-    product_warehouse = ProductWarehouseSerializer(data=request.data)
-
-    if ProductWarehouse.objects.filter(product_id=request.data.get("product_id")).exists():
-        ProductWarehouse.objects.filter(**request.data).delete()
-
-    if product_warehouse.is_valid():
-        product_warehouse.save()
-        return Response(product_warehouse.data)
-    else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 @renderer_classes([JSONRenderer])
@@ -297,8 +252,3 @@ def list_products_from_order(request, id):
         return Response(products.data)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-@api_view(['GET'])
-def get_csrf(request):
-    return HttpResponse("{0}".format(csrf.get_token(request)), content_type="text/plain")

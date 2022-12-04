@@ -1,5 +1,22 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
+import jQuery from 'jquery';
+
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 class ListWarehousesComponent extends Component {
   constructor(props) {
@@ -9,20 +26,40 @@ class ListWarehousesComponent extends Component {
     };
   }
 
-  componentDidMount() {
-    fetch("manager/warehouses")
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        this.setState(() => {
-          return {
-            data,
-            loaded: true
-          };
-        });
-      });
-  }
+  handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("submitted");
+    const address = e.target.address.value;
+    const id = e.target.id.value;
+    const url = "http://localhost:8000/manager/warehouse/update/".concat(id)
+    fetch(url, {
+      method: 'POST',
+      headers: {
+          'Authorization':'Token 2eaa330cb4803995b8cc3474360ac1905f414743',
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie("csrftoken")
+      },
+      body: JSON.stringify({address:address})
+    }).then((response) => {
+      console.log(response);
+      return response.json();
+    });
+  };
+    componentDidMount() {
+        fetch("manager/warehouses")
+          .then(response => {
+            return response.json();
+          })
+          .then(data => {
+            this.setState(() => {
+              return {
+                data,
+                loaded: true
+              };
+            });
+          });
+      }
 
   render() {
     return (
@@ -30,8 +67,15 @@ class ListWarehousesComponent extends Component {
         {this.state.data.map(warehouses => {
           return (
             <div>
-                Warehouse id: {warehouses.id} <br/>
-                Warehouse address: {warehouses.address}
+            <br />
+            <form onSubmit={this.handleSubmit}>
+                Warehouse id: <input type="text" name="id" defaultValue={warehouses.id}/> <br/><br />
+                Warehouse address: <input type="text" name="address" defaultValue={warehouses.address}/>
+                <br /><br /><br />
+                <input type="submit" value="Actualizar"/>
+            </form>
+            <br />
+
             </div>
           );
         })}

@@ -12,6 +12,7 @@ urlpatterns = [
     path('delete_product', views.delete_product),
     path('list_warehouses', views.list_warehouses),
     path('add_warehouse', views.add_warehouse),
+    path('update_warehouse', views.update_warehouse),
     path('delete_warehouse', views.delete_warehouse),
 
 ]

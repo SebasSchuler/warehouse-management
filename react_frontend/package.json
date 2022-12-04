@@ -8,6 +8,7 @@
     "list-warehouses": "webpack --mode development ./src/ListWarehouses.js --output-path ./static/frontend/ --output-filename list-warehouses.js",
     "add-warehouse": "webpack --mode development ./src/AddWarehouse.js --output-path ./static/frontend/ --output-filename add-warehouse.js",
     "delete-warehouse": "webpack --mode development ./src/DeleteWarehouse.js --output-path ./static/frontend/ --output-filename delete-warehouse.js",
+    "update-warehouse": "webpack --mode development ./src/UpdateWarehouse.js --output-path ./static/frontend/ --output-filename update-warehouse.js",
     "list-products": "webpack --mode development ./src/ListProducts.js --output-path ./static/frontend/ --output-filename list-products.js",
     "add-product": "webpack --mode development ./src/AddProduct.js --output-path ./static/frontend/ --output-filename add-product.js",
     "delete-product": "webpack --mode development ./src/DeleteProduct.js --output-path ./static/frontend/ --output-filename delete-product.js",
@@ -27,6 +28,7 @@
     "webpack-cli": "^5.0.0"
   },
   "dependencies": {
-    "jquery": "^3.6.1"
+    "jquery": "^3.6.1",
+    "react-router-dom": "^6.4.4"
   }
 }
