@@ -1,0 +1,1 @@
+import DeleteProductComponent from "./components/DeleteProductComponent";

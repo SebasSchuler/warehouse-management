@@ -31,7 +31,8 @@ class ListProductsComponent extends Component {
           return (
             <div>
                 Product name: {products.name} <br/>
-                Product Description: {products.description}
+                Product Description: {products.description} <br/>
+                Product Price: {products.price} <br/>
             </div>
           );
         })}

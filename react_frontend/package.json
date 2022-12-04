@@ -9,6 +9,8 @@
     "add-warehouse": "webpack --mode development ./src/AddWarehouse.js --output-path ./static/frontend/ --output-filename add-warehouse.js",
     "delete-warehouse": "webpack --mode development ./src/DeleteWarehouse.js --output-path ./static/frontend/ --output-filename delete-warehouse.js",
     "list-products": "webpack --mode development ./src/ListProducts.js --output-path ./static/frontend/ --output-filename list-products.js",
+    "add-product": "webpack --mode development ./src/AddProduct.js --output-path ./static/frontend/ --output-filename add-product.js",
+    "delete-product": "webpack --mode development ./src/DeleteProduct.js --output-path ./static/frontend/ --output-filename delete-product.js",
     "list-orders": "webpack --mode development ./src/ListOrders.js --output-path ./static/frontend/ --output-filename list-orders.js"
   },
   "keywords": [],

@@ -17,6 +17,14 @@ def list_products(request):
     return render(request, 'frontend/products/list_products.html')
 
 
+def add_product(request):
+    return render(request, 'frontend/products/add_product.html')
+
+
+def delete_product(request):
+    return render(request, 'frontend/products/delete_product.html')
+
+
 def warehouses(request):
     return render(request, 'frontend/warehouses/warehouses.html')
 

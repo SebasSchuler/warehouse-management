@@ -1,0 +1,1 @@
+import AddProductComponent from "./components/AddProductComponent";
