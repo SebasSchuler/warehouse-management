@@ -1,0 +1,1 @@
+import DeleteOrderComponent from "./components/DeleteOrderComponent";

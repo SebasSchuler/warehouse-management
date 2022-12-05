@@ -51,3 +51,15 @@ def delete_warehouse(request):
 
 def orders(request):
     return render(request, 'frontend/orders/orders.html')
+
+
+def list_orders(request):
+    return render(request, 'frontend/orders/list_orders.html')
+
+
+def add_order(request):
+    return render(request, 'frontend/orders/add_order.html')
+
+
+def delete_order(request):
+    return render(request, 'frontend/orders/delete_order.html')
