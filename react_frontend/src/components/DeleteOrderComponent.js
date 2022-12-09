@@ -18,7 +18,12 @@ function getCookie(name) {
     return cookieValue;
 }
 class DeleteOrderComponent extends Component {
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      orders: [],
+    };
+  }
   handleSubmit = (e) => {
     e.preventDefault();
     console.log("submitted");
@@ -28,7 +33,7 @@ class DeleteOrderComponent extends Component {
     fetch(url, {
       method: 'DELETE',
       headers: {
-          'Authorization':'Token 2eaa330cb4803995b8cc3474360ac1905f414743',
+          'Authorization':'Token ce352f14a56d1430cf78cb6edce20a9fab009fd0',
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
           'X-CSRFToken': getCookie("csrftoken")
@@ -38,14 +43,31 @@ class DeleteOrderComponent extends Component {
       return response.json();
     });
   };
+  componentDidMount() {
+    fetch("manager/orders")
+      .then(response => {
+        return response.json();
+      })
+      .then(orders => {
+        this.setState(() => {
+          return {
+            orders,
+            loaded: true
+          };
+        });
+      });
+  }
 
   render() {
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <label>Id: </label>
+          <label>Selecciona un pedido: </label>
           <br />
-          <input type="text" name="id" />
+          <select name="id">
+                                {this.state.orders.map(order => {
+                                    return (<option value={order.id}>{order.id}</option>)})}
+                                </select>
           <br />
           <input type="submit" />
         </form>

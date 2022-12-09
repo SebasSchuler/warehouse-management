@@ -17,7 +17,7 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-class AddWarehouseComponent extends Component {
+class AddProductComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -34,7 +34,7 @@ class AddWarehouseComponent extends Component {
     fetch("http://localhost:8000/manager/product/create/", {
       method: 'POST',
       headers: {
-          'Authorization':'Token 2eaa330cb4803995b8cc3474360ac1905f414743',
+          'Authorization':'Token ce352f14a56d1430cf78cb6edce20a9fab009fd0',
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
           'X-CSRFToken': getCookie("csrftoken")
@@ -96,4 +96,4 @@ class AddWarehouseComponent extends Component {
 }
 
 const container = document.getElementById("api");
-render(<AddWarehouseComponent />, container);
+render(<AddProductComponent />, container);

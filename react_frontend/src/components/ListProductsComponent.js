@@ -40,7 +40,7 @@ class ListProductsComponent extends Component {
         fetch(url, {
           method: 'POST',
           headers: {
-              'Authorization':'Token 2eaa330cb4803995b8cc3474360ac1905f414743',
+              'Authorization':'Token ce352f14a56d1430cf78cb6edce20a9fab009fd0',
               'Accept': 'application/json, text/plain, */*',
               'Content-Type': 'application/json',
               'X-CSRFToken': getCookie("csrftoken")

@@ -17,7 +17,13 @@ function getCookie(name) {
     }
     return cookieValue;
 }
-class AddWarehouseComponent extends Component {
+class DeleteProductComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      products: [],
+    };
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -28,7 +34,7 @@ class AddWarehouseComponent extends Component {
     fetch(url, {
       method: 'DELETE',
       headers: {
-          'Authorization':'Token 2eaa330cb4803995b8cc3474360ac1905f414743',
+          'Authorization':'Token ce352f14a56d1430cf78cb6edce20a9fab009fd0',
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
           'X-CSRFToken': getCookie("csrftoken")
@@ -38,14 +44,31 @@ class AddWarehouseComponent extends Component {
       return response.json();
     });
   };
+  componentDidMount() {
+    fetch("manager/products")
+      .then(response => {
+        return response.json();
+      })
+      .then(products => {
+        this.setState(() => {
+          return {
+            products,
+            loaded: true
+          };
+        });
+      });
+  }
 
   render() {
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <label>Id: </label>
+          <label>Selecciona un producto: </label>
           <br />
-          <input type="text" name="id" />
+          <select name="id">
+                                {this.state.products.map(product => {
+                                    return (<option value={product.id}>{product.name}</option>)})}
+                                </select>
           <br />
           <input type="submit" />
         </form>
@@ -55,4 +78,4 @@ class AddWarehouseComponent extends Component {
 }
 
 const container = document.getElementById("api");
-render(<AddWarehouseComponent />, container);
+render(<DeleteProductComponent />, container);

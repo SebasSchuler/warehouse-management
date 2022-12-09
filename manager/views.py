@@ -24,12 +24,12 @@ def login(request):
     username = request.data.get("username")
     password = request.data.get("password")
     if username is None or password is None:
-        return Response({'error': 'Please provide both username and password'},
-                        status=HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Unauthorized user'},
+                        status=HTTP_401_UNAUTHORIZED)
     user = authenticate(username=username, password=password)
     if not user:
-        return Response({'error': 'Invalid Credentials'},
-                        status=HTTP_404_NOT_FOUND)
+        return Response({'error': 'Unauthorized user'},
+                        status=HTTP_401_UNAUTHORIZED)
     token = Token.objects.create(user=user)
     print(token.key)
     return Response({'token': token.key},
@@ -39,6 +39,7 @@ def login(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_product(request):
+    '''API View to add one product'''
     product = ProductSerializer(data=request.data)
 
     if Product.objects.filter(**request.data).exists():
@@ -55,6 +56,7 @@ def add_product(request):
 @permission_classes([IsAuthenticated])
 @renderer_classes([JSONRenderer])
 def list_products(request):
+    '''API View to list all products'''
     if request.query_params:
         products = Product.objects.filter(**request.query_param.dict())
     else:
@@ -71,6 +73,7 @@ def list_products(request):
 @permission_classes([IsAuthenticated])
 @renderer_classes([JSONRenderer])
 def get_product_by_pk(request, id):
+    '''API View to get one product'''
     product = Product.objects.filter(id=id)
     if product:
         product = ProductSerializer(product, many=True)
@@ -82,6 +85,7 @@ def get_product_by_pk(request, id):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_product(request, id):
+    '''API View to delete one product'''
     product = Product.objects.filter(id=id)
 
     if product:
@@ -94,6 +98,7 @@ def delete_product(request, id):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def update_product(request, id):
+    '''API View to update one product'''
     product = Product.objects.get(id=id)
     data = ProductSerializer(instance=product, data=request.data)
 
@@ -107,6 +112,7 @@ def update_product(request, id):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_warehouse(request):
+    '''API View to add one product'''
     warehouse = WarehouseSerializer(data=request.data)
 
     if Warehouse.objects.filter(**request.data).exists():
@@ -123,6 +129,7 @@ def add_warehouse(request):
 @permission_classes([IsAuthenticated])
 @renderer_classes([JSONRenderer])
 def list_warehouses(request):
+    '''API View to list all warehouses'''
     if request.query_params:
         warehouse = Warehouse.objects.filter(**request.query_param.dict())
     else:
@@ -139,6 +146,7 @@ def list_warehouses(request):
 @permission_classes([IsAuthenticated])
 @renderer_classes([JSONRenderer])
 def get_warehouse_by_pk(request, id):
+    '''API View to get one warehouse'''
     warehouse = Warehouse.objects.filter(id=id)
     if warehouse:
         warehouse = WarehouseSerializer(warehouse, many=True)
@@ -150,6 +158,7 @@ def get_warehouse_by_pk(request, id):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_warehouse(request, id):
+    '''API View to delete one warehouse'''
     warehouse = Warehouse.objects.filter(id=id)
 
     if warehouse:
@@ -162,6 +171,7 @@ def delete_warehouse(request, id):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def update_warehouse(request, id):
+    '''API View to update one warehouse'''
     warehouse = Warehouse.objects.get(id=id)
     data = WarehouseSerializer(instance=warehouse, data=request.data)
 
@@ -174,8 +184,8 @@ def update_warehouse(request, id):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-@renderer_classes([JSONRenderer])
 def add_order(request):
+    '''API View to add one order'''
     order = OrderSerializer(data=request.data)
 
     if Order.objects.filter(**request.data).exists():
@@ -192,6 +202,7 @@ def add_order(request):
 @permission_classes([IsAuthenticated])
 @renderer_classes([JSONRenderer])
 def list_orders(request):
+    '''API View to list all orders'''
     if request.query_params:
         order = Order.objects.filter(**request.query_param.dict())
     else:
@@ -208,6 +219,7 @@ def list_orders(request):
 @permission_classes([IsAuthenticated])
 @renderer_classes([JSONRenderer])
 def get_order_by_pk(request, id):
+    '''API View to get one order'''
     order = Order.objects.filter(id=id)
     if order:
         order = OrderSerializer(order, many=True)
@@ -219,6 +231,7 @@ def get_order_by_pk(request, id):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_order(request, id):
+    '''API View to delete one order'''
     order = Order.objects.filter(id=id)
 
     if order:
@@ -231,6 +244,7 @@ def delete_order(request, id):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def update_order(request, id):
+    '''API View to update one order'''
     order = Order.objects.get(id=id)
     data = OrderSerializer(instance=order, data=request.data)
 
@@ -245,6 +259,7 @@ def update_order(request, id):
 @permission_classes([IsAuthenticated])
 @renderer_classes([JSONRenderer])
 def list_products_from_order(request, id):
+    '''API View to list products from one order'''
     products = Product.objects.filter(order_id_id__id=id)
     if products:
         products = ProductSerializer(products, many=True)
