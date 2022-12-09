@@ -38,7 +38,6 @@ def login(request):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-@renderer_classes([JSONRenderer])
 def add_product(request):
     product = ProductSerializer(data=request.data)
 
